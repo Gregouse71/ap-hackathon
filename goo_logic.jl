@@ -1,7 +1,6 @@
 using LinearAlgebra: norm, dot
 
 include("goo_tree.jl")
-include("game.jl")
 
 max_link_goo = 3.0
 max_link_attach = 2.0
