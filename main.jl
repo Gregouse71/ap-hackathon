@@ -44,7 +44,6 @@ function main()
             
             tree = GooTree(sol(last_tick_time), tree.edges, tree.attach)
             add_goo!(tree, game_scene, screen_to_world(mp, game_scene, scene))
-            println(tree)
             sol = simulate_tree(tree, (last_tick_time, last_tick_time + sim_continue))
             last_time = last_tick_time
             #=attachs[] = tree.attach
