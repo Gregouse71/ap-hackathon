@@ -2,8 +2,8 @@ using LinearAlgebra: norm, dot
 
 include("goo_tree.jl")
 
-max_link_goo = 1.0
-max_link_attach = 0.5
+max_link_goo = 3.0
+max_link_attach = 2.0
 
 """
     function goo_distances(tree::GooTree, pos)
