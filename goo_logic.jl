@@ -1,7 +1,7 @@
 using LinearAlgebra: norm, dot
 
 include("goo_tree.jl")
-using .Game: Game_Scene, Platform
+include("game.jl")
 
 """
     function goo_distances(tree::GooTree, pos)
