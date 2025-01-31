@@ -77,7 +77,7 @@ function add_goo!(tree::GooTree, platforms::Game_Scene, pos)
         append!(tree.positions, pos, 0, 0)
         push!(tree.edges, [])
         for (i, dist) in enumerate(goo_dist)
-            if dist <= max_link_gooi
+            if dist <= max_link_goo
                 push!(tree.edges[i], (n, goo_dist[i]))
                 push!(tree.edges[n], (i, goo_dist[i]))
             end
