@@ -1,4 +1,4 @@
-import GLMakie: text!, lift, scatter!, linesegments!
+import GLMakie: text!, lift, scatter!, linesegments!, lines!
 
 """
     createGameDisplay(scene::GLMakie.scene)
@@ -16,6 +16,8 @@ function createGameDisplay(scene, pos_vel, attachs, edges, platforms, game_scene
     attach_lines = lift(extract_attach, attachs, current_positions, game_scene, screen_scene)
     attach_widths = lift(extract_attach_widths, attachs, current_positions, game_scene, screen_scene)
     linesegments!(scene, attach_lines, linewidth = attach_widths, color = :orange, linecap=:round)
+    #lift(draw_arc_line!, attach_lines, attach_widths, scene, :black)
+    #draw_arc_line!(attach_lines[], attach_widths[], scene, :black)
 
     # edges
     edges_lines = lift(extract_edges, edges, current_positions)
@@ -25,6 +27,16 @@ function createGameDisplay(scene, pos_vel, attachs, edges, platforms, game_scene
     # Goos
     scatter!(scene, current_positions, markersize = 0.1*m2px, color = :black)
 end
+
+#=function draw_arc_line!(lines, widths, scene, color)
+    for i in 1:2:length(lines)
+        p1 = lines[i]
+        p2 = lines[i+1]
+        pts = [(p1.*f .+ p2.*(1-f)) for f in 0:0.1:1]
+        wts = [widths[(i+1)÷2]*abs(f-0.5)*2 for f in 0:0.1:1]
+        lines!(scene, (p->p[1]).(pts), (p->p[2]).(pts); linewidth=wts, color=color)
+    end
+end=#
 
 function extract_positions(pos_vel::Vector{Float64}, game_scene, screen_scene)
     return [world_to_screen((pos_vel[i], pos_vel[i+1]), game_scene, screen_scene) for i in 1:4:length(pos_vel)]
