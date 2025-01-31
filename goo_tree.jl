@@ -17,6 +17,7 @@ struct GooTree
 end
 
 k = 100  # J/m²
+m = 0.4
 
 """
     function step(du::Vector{Float64}, u::Vector{Float64}, p, t)
@@ -25,21 +26,21 @@ Calcul, dans du, la dérivée de positions.
 """
 function step!(positions_derivee, positions::Vector{Float64}, params , t)
     adjacence, attach = params
-    for i in 0:length(positions)÷4 - 1
-        positions_derivee[4i + 1:4i + 2] = positions[4i + 3:4i + 4]  # la vitesse est la dérivée de la position
+    for i in 1:length(positions)÷4
+        positions_derivee[4i - 3:4i - 2] = positions[4i - 1:4i]  # la vitesse est la dérivée de la position
 
         ΣF = [0., -80.]  # Accumulateur des forces
-        for voisin in adjacence[i + 1]  # Pour chaque voisin du point
+        for voisin in adjacence[i]  # Pour chaque voisin du point
             pos, l0 = voisin
-            δpos = pos .- positions[4i + 1:4i + 2]  # Difference de position des points
+            δpos = pos .- positions[4i - 3:4i - 2]  # Difference de position des points
             ΣF .+= k * (1 - l0/norm(δpos)) .* δpos  # Force du ressort: loi de Hooke
         end
-        for attaché in attach[i + 1]
+        for attaché in attach[i]
             att, l0 = attaché
-            δpos = att .- positions[4i + 1:4i + 2]  # Difference de position des points
+            δpos = att .- positions[4i - 3:4i - 2]  # Difference de position des points
             ΣF .+= k * (1 - l0/norm(δpos)) .* δpos  # Force du ressort: loi de Hooke
         end
-        positions_derivee[4i + 3:4i + 4] = ΣF  # l'accélération est la dérivée de la vitesse
+        positions_derivee[4i - 1:4i] = ΣF / m  # l'accélération est la dérivée de la vitesse
     end
 end
 
