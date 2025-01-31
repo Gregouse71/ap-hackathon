@@ -99,6 +99,9 @@ function add_goo!(tree::GooTree, platforms::Game_Scene, pos)
         end
         plat_added = true
     end
+    if !plat_added && goo_added
+        push!(tree.attach, [])
+    end
     plat_added || goo_added
 end
 
