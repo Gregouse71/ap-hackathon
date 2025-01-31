@@ -6,18 +6,16 @@ import GLMakie: text!, lift, scatter!, linesegments!, lines!
 
 function createGameDisplay(scene, pos_vel, attachs, edges, platforms, game_scene, screen_scene)
     current_positions = lift(extract_positions, pos_vel, game_scene, screen_scene)
-    m2px = world_to_screen((1.0, 0.0), game_scene, screen_scene)[1]
-    
+
     # platforms
     platfoms_lines = lift(extract_platforms, platforms, game_scene, screen_scene)
-    linesegments!(scene, platfoms_lines, linewidth = 0.05*m2px, color = :black, linecap=:round)
+    platform_width = lift(get_marker_size, current_positions, game_scene, screen_scene, 0.02)
+    linesegments!(scene, platfoms_lines, linewidth = platform_width, color = :black, linecap=:round)
 
     # attach
     attach_lines = lift(extract_attach, attachs, current_positions, game_scene, screen_scene)
     attach_widths = lift(extract_attach_widths, attachs, current_positions, game_scene, screen_scene)
     linesegments!(scene, attach_lines, linewidth = attach_widths, color = :orange, linecap=:round)
-    #lift(draw_arc_line!, attach_lines, attach_widths, scene, :black)
-    #draw_arc_line!(attach_lines[], attach_widths[], scene, :black)
 
     # edges
     edges_lines = lift(extract_edges, edges, current_positions)
@@ -25,18 +23,18 @@ function createGameDisplay(scene, pos_vel, attachs, edges, platforms, game_scene
     linesegments!(scene, edges_lines, linewidth = edges_widths, color = :yellow, linecap=:round)
 
     # Goos
-    scatter!(scene, current_positions, markersize = 0.1*m2px, color = :black)
+    goos_width = lift(get_marker_size, current_positions, game_scene, screen_scene, 0.05)
+    scatter!(scene, current_positions, markersize = goos_width, color = :black)
 end
 
-#=function draw_arc_line!(lines, widths, scene, color)
-    for i in 1:2:length(lines)
-        p1 = lines[i]
-        p2 = lines[i+1]
-        pts = [(p1.*f .+ p2.*(1-f)) for f in 0:0.1:1]
-        wts = [widths[(i+1)÷2]*abs(f-0.5)*2 for f in 0:0.1:1]
-        lines!(scene, (p->p[1]).(pts), (p->p[2]).(pts); linewidth=wts, color=color)
-    end
-end=#
+"""
+    get_marker_size(positions, game_scene, screen_scene, w)
+
+calculates the size of a marker using the current zoom
+"""
+function get_marker_size(positions, game_scene, screen_scene, w)
+    return w * world_to_screen((1.0, 0.0), game_scene, screen_scene)[1]
+end
 
 function extract_positions(pos_vel::Vector{Float64}, game_scene, screen_scene)
     return [world_to_screen((pos_vel[i], pos_vel[i+1]), game_scene, screen_scene) for i in 1:4:length(pos_vel)]
@@ -131,8 +129,8 @@ get the width of the link of length l0, pulled between the positions p1 and p2
 """
 function get_edge_width(p1::Tuple{Float64, Float64}, p2::Tuple{Float64, Float64}, l0::Float64)
     l = length(p1, p2)
-    compression = exp((l0 - l) * 0.5)
-    return (compression * 0.02 + 0.02);
+    compression = min(exp((l0 - l) * 10), 4.0)
+    return (compression * 0.01 + 0.005);
 end
 
 function Base.length(p1::Tuple{Float64, Float64}, p2::Tuple{Float64, Float64})
