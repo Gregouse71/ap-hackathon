@@ -1,4 +1,4 @@
-using GLMakie, CairoMakie
+using GLMakie
 GLMakie.activate!()
 
 scene = Scene(camera = campixel!)
