@@ -25,7 +25,7 @@ function createGameDisplay(scene, pos_vel, attachs, edges)
 end
 
 function extract_positions(pos_vel::Vector{Float64})
-    return [((pos_vel[i] + 1.) * m2px, (pos_vel[i+1] + 2.) * m2px) for i in 1:4:length(pos_vel)]
+    return [((pos_vel[i] + 2.) * m2px, (pos_vel[i+1] + 2.) * m2px) for i in 1:4:length(pos_vel)]
 end
 
 function extract_attach(attachs::Vector{Vector{Tuple{Tuple{Float64, Float64}, Float64}}}, positions::Vector{Tuple{Float64, Float64}})

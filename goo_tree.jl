@@ -26,19 +26,19 @@ Calcul, dans du, la dérivée de positions.
 """
 function step!(positions_derivee, positions::Vector{Float64}, params , t)
     adjacence, attach = params
-    for i in 1:length(positions)÷4
+    for i in 1:length(positions) ÷ 4
         positions_derivee[4i - 3:4i - 2] = positions[4i - 1:4i]  # la vitesse est la dérivée de la position
 
         ΣF = [0., -80.]  # Accumulateur des forces
         for voisin in adjacence[i]  # Pour chaque voisin du point
             pos, l0 = voisin
             δpos = pos .- positions[4i - 3:4i - 2]  # Difference de position des points
-            ΣF .+= k * (1 - l0/norm(δpos)) .* δpos  # Force du ressort: loi de Hooke
+            ΣF .+= k * (1 - l0/norm(δpos)) * δpos  # Force du ressort: loi de Hooke
         end
         for attaché in attach[i]
             att, l0 = attaché
             δpos = att .- positions[4i - 3:4i - 2]  # Difference de position des points
-            ΣF .+= k * (1 - l0/norm(δpos)) .* δpos  # Force du ressort: loi de Hooke
+            ΣF .+= k * (1 - l0/norm(δpos)) * δpos  # Force du ressort: loi de Hooke
         end
         positions_derivee[4i - 1:4i] = ΣF / m  # l'accélération est la dérivée de la vitesse
     end
