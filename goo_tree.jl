@@ -1,4 +1,5 @@
 using LinearAlgebra: norm
+using DifferentialEquations: ODEProblem, solve, TSit5
 
 """
     GooTree{N}
@@ -19,7 +20,7 @@ k = 100  # J/m²
 
 Calcul, dans du, la dérivée de positions
 """
-function step(positions_derivee, positions, params, t)
+function step!(positions_derivee, positions, params, t)
     for i in 1::length(positions)÷4
         positions_derivee[4i:4i + 1] = positions[4i + 2:4i + 3]  # la vitesse est la dérivée de la position
 
@@ -33,3 +34,16 @@ function step(positions_derivee, positions, params, t)
     end
 end
 
+"""
+    function simulate_tree(init::GooTree, tspan)
+
+Simule le *GooTree* init sur une durée tspan.
+Renvoie la liste des positions successives et la liste des pas de temps correspondants.
+"""
+function simulate_tree(init::GooTree, tspan)
+    u0 = init.positions
+    p = init.edges
+    prob = ODEProblem(step!, u0, tspan, p)
+    sol = solve(prob)
+    sol.u, sol.t
+end
