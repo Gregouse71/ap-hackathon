@@ -13,7 +13,7 @@ Représente un arbre de goo:
 struct GooTree
     positions::Vector{Float64}  # Position des goo dans l'espace des phases (q_ix, q_iy, p_ix, p_iy)
     edges::Vector{Vector{Tuple{Int64, Float64}}}
-    attach::Vector{Vector{Tuple{Vector{Float64}, Float64}}}
+    attach::Vector{Vector{Tuple{Tuple{Float64, Float64}, Float64}}}
 end
 
 k = 100  # J/m²
@@ -36,7 +36,7 @@ function step!(positions_derivee, positions::Vector{Float64}, params , t)
         end
         for attaché in attach[i + 1]
             att, l0 = attaché
-            δpos = att[1] .- positions[4i + 1:4i + 2]  # Difference de position des points
+            δpos = att .- positions[4i + 1:4i + 2]  # Difference de position des points
             ΣF .+= k * (1 - l0/norm(δpos)) .* δpos  # Force du ressort: loi de Hooke
         end
         positions_derivee[4i + 3:4i + 4] = ΣF  # l'accélération est la dérivée de la vitesse
