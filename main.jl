@@ -1,15 +1,21 @@
-using GLMakie, CairoMakie
+import GLMakie: activate!, Scene, campixel!, events, Events, Observable, on
+include("display.jl")
+
+include("test_sim.jl")
+positions = Observable(sol(0))
+
 
 # activates a interactive window and creates a scene (= Figure())
-GLMakie.activate!()
+activate!()
 scene = Scene(camera = campixel!)
 
-function main()
-    running = true
-    while running
+# renders interactively the whole game
+createGameDisplay(scene, positions)
 
-    end
+on(events(scene).tick) do tick
+    # update function
+    positions[] = sol(min(tick.time, 3))
+    notify(positions)
 end
 
-
-main()
+scene
