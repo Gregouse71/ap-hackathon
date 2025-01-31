@@ -16,7 +16,7 @@ end
 
 L'ensemble des objets de la scène de jeux
 """
-struct Scene
+struct Game_Scene
     objects::Vector{Platform}
 end
 
