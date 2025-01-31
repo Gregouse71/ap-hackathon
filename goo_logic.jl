@@ -27,10 +27,9 @@ end
 - pos sous la forme (x, y)
 
 Renvoie la liste de distances jusqu'à chaque plateforme à partir de la position pos.  
-Renvoie aussi la liste de positions les plus proches sur chaque plateforme.
+Renvoie aussi la liste de positions les plus proches sur chaque plateforme sous la forme (x, y).
 """
 function platform_distances(platforms::Game_Scene, pos)
-    n = length(platforms.objects)
     lengths = Float64[]
     positions = Tuple{Float64, Float64}[]
     for plat in platforms.objects
@@ -42,6 +41,7 @@ function platform_distances(platforms::Game_Scene, pos)
         factor = prod / (dot(vect1, vect1))
         col_vect = vect1 .* factor
         norm_vect = vect2 .- col_vect
+
         if factor > 1
             push!(lengths, norm(vect3))
             push!(positions, (x2, y2))
@@ -102,11 +102,44 @@ function add_goo!(tree::GooTree, platforms::Game_Scene, pos)
     plat_added || goo_added
 end
 
+"""
+    function remove_goo(tree::GooTree, index)
+
+Enlève le goo à la position donnée
+"""
+function remove_goo(tree::GooTree, index)
+    if index > length(tree.edges)
+        return false
+    end
+    deleteat!(tree.positions, 4*index - 3 : 4*index)
+    for neighbor in tree.edges[index]
+        second, _ = neighbor
+        popat!(tree.edges[second], findfirst(x -> x[1] == index, tree.edges[second]))
+    end
+    tree.edges[index] = []
+    tree.attach[index] = []
+    for (i, edges) in enumerate(tree.edges)
+        for (j, edge) in enumerate(edges)
+            (second, l) = edge
+            if second > index
+                tree.edges[i][j] = (second - 1, l)
+            end
+        end
+    end
+    for i in index:(length(tree.edges) - 1)
+        tree.edges[i] = tree.edges[i + 1]
+        tree.attach[i] = tree.attach[i + 1]
+    end
+    pop!(tree.edges)
+    pop!(tree.attach)
+    return true
+end
+
 #=
 Voici un petit test:
 
-plat = Game_Scene([Platform(((-1., -1.), (1., -1.)))])
+plat = Game_Scene([Platform(((-1., -1.), (1., -1.)))], (-10.0, -5.0, 10.0, 5.0))
 test = GooTree([], [], [])
-add_goo!(test, plat, (0.55, -1.0)
+add_goo!(test, plat, (0.55, -1.0))
 add_goo!(test, plat, (0.50, -1.0))
 =#
