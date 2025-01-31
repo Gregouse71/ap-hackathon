@@ -1,3 +1,4 @@
+module GooTree
 import LinearAlgebra: norm
 import OrdinaryDiffEq: solve, ODEProblem
 
@@ -29,7 +30,7 @@ function step!(positions_derivee, positions::Vector{Float64}, params , t)
     for i in 1:length(positions) ÷ 4
         positions_derivee[4i - 3:4i - 2] = positions[4i - 1:4i]  # la vitesse est la dérivée de la position
 
-        ΣF = [0., -80.]  # Accumulateur des forces
+        ΣF = [0., -1.]  # Accumulateur des forces
         for voisin in edges[i]  # Pour chaque voisin du point
             ind, l0 = voisin
             pos = positions[4ind - 3:4ind - 2]
@@ -57,4 +58,5 @@ function simulate_tree(init::GooTree, tspan)
     p = init.edges, init.attach
     prob = ODEProblem(step!, u0, tspan, p)
     return solve(prob)
+end
 end

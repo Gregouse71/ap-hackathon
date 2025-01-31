@@ -1,3 +1,4 @@
+module Game
 # Contient les types relatifs à la l'implémentation de la scène de jeux
 
 """
@@ -15,6 +16,8 @@ end
 L'ensemble des objets de la scène de jeux
 """
 struct Game_Scene
+    goal::Vector{Platform}
     objects::Vector{Platform}
     bounds::NTuple{4, Float64}
+end
 end

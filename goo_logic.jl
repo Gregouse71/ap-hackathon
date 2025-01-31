@@ -1,3 +1,4 @@
+module GooLogic
 using LinearAlgebra: norm, dot
 
 include("goo_tree.jl")
@@ -143,3 +144,4 @@ test = GooTree([], [], [])
 add_goo!(test, plat, (0.55, -1.0))
 add_goo!(test, plat, (0.50, -1.0))
 =#
+end

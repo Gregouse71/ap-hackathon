@@ -1,3 +1,4 @@
+module Display
 import GLMakie: text!, lift, scatter!, linesegments!
 
 """
@@ -97,4 +98,5 @@ end
 
 function Base.length(p1::Tuple{Float64, Float64}, p2::Tuple{Float64, Float64})
     return sum((x -> x*x).(p1 .- p2)) ^ 0.5
+end
 end
