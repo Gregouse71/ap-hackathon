@@ -13,7 +13,7 @@ function createGameDisplay(scene, pos_vel, attachs, edges, platforms, game_scene
     linesegments!(scene, platfoms_lines, linewidth = 0.05*m2px, color = :black, linecap=:round)
 
     # attach
-    attach_lines = lift(extract_attach, attachs, current_positions, game_scene, screen_scene)
+    attach_lines#=, attach_widths=# = lift(extract_attach, attachs, current_positions, game_scene, screen_scene)
     linesegments!(scene, attach_lines, linewidth = 0.03*m2px, color = :yellow, linecap=:round)
 
     # edges
@@ -39,14 +39,19 @@ function extract_platforms(platforms, game_scene, screen_scene)
 end
 
 function extract_attach(attachs::Vector{Vector{Tuple{Tuple{Float64, Float64}, Float64}}}, positions::Vector{Tuple{Float64, Float64}}, game_scene, screen_scene)
-    out = Tuple{Float64, Float64}[]
+    lines = Tuple{Float64, Float64}[]
+    #widths = Float64[]
+
     for (i, la) in enumerate(attachs)
         for a in la
-            push!(out, positions[i])
-            push!(out, world_to_screen(a[1], game_scene, screen_scene))
+            push!(lines, positions[i])
+            push!(lines, world_to_screen(a[1], game_scene, screen_scene))
+
+            #push!(widths, get_edge_width(positions[i], a[1], a[2]))
         end
     end
-    out
+    
+    lines#, widths
 end
 
 function extract_edges(edges::Vector{Vector{Tuple{Int64, Float64}}}, positions::Vector{Tuple{Float64, Float64}})
@@ -78,4 +83,18 @@ function world_to_screen(pos, game_scene, screen_scene)
     w, h = size(screen_scene)
     scale = min(w / (game_scene.bounds[3] - game_scene.bounds[1]), h / (game_scene.bounds[4] - game_scene.bounds[2]))
     return (pos .- (game_scene.bounds[1], game_scene.bounds[2])) .* scale
+end
+
+
+"""
+    get_edge_width(p1::Tuple{Float64, Float64}, p2::Tuple{Float64, Float64}, l0::Float64)
+
+get the width of the link of length l0, pulled between the positions p1 and p2
+"""
+function get_edge_width(p1::Tuple{Float64, Float64}, p2::Tuple{Float64, Float64}, l0::Float64)
+    #l = length()
+end
+
+function Base.length(p1::Tuple{Float64, Float64}, p2::Tuple{Float64, Float64})
+    return sum((x -> x*x).(p1 .- p2)) ^ 0.5
 end

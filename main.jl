@@ -13,20 +13,18 @@ function main()
     positions = Observable(tree.positions)
     attachs = Observable(tree.attach)
     edges = Observable(tree.edges)
-
-    println(tree.attach)
+    platforms = Observable(game_scene.objects)
 
     # activates a interactive window and creates a scene (= Figure())
     activate!()
     scene = Scene(camera = campixel!)
 
     # renders interactively the whole game
-    createGameDisplay(scene, positions, attachs, edges, game_scene, scene)
+    createGameDisplay(scene, positions, attachs, edges, platforms, game_scene, scene)
 
     on(events(scene).tick) do tick
         # update function
         positions[] = sol(tick.time % 100)
-        notify(positions)
     end
 
     on(events(scene).mousebutton) do event
@@ -37,9 +35,6 @@ function main()
             positions[] = tree.positions
             attachs[] = tree.attach
             edges[] = tree.edges
-            notify(positions)
-            notify(attachs)
-            notify(edges)
         end
     end
 
