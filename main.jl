@@ -36,6 +36,7 @@ function main()
         end
         last_tick_time = tick.time
         positions[] = sol(tick.time)
+        notify(positions)
     end
 
     on(events(scene).mousebutton) do event
