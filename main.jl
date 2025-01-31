@@ -5,7 +5,7 @@ include("goo_tree.jl")
 function main()
     tree = GooTree([-1., 2., 0., 0., 1., 0., 0., 0.], [[(2, 2.)], [(1, 2.)]], [[], []])
     tree1 = GooTree([-1., 0., 0., 0.], [[]], [[]])
-    sol = simulate_tree(tree, (0., 10.))
+    sol = simulate_tree(tree, (0., 100.))
     
     positions = Observable(sol(0))
 
@@ -18,7 +18,7 @@ function main()
 
     on(events(scene).tick) do tick
         # update function
-        positions[] = sol(tick.time % 10)
+        positions[] = sol(tick.time % 100)
         notify(positions)
     end
 
