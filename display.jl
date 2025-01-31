@@ -4,11 +4,12 @@ import GLMakie: text!, lift, scatter!, linesegments!
     createGameDisplay(scene::GLMakie.scene)
 """
 
-function createGameDisplay(scene, pos_vel, attachs, edges, game_scene)
-    current_positions = lift(extract_positions, pos_vel, game_scene)
+function createGameDisplay(scene, pos_vel, attachs, edges, game_scene, screen_scene)
+    w, h = size(screen_scene)
+    current_positions = lift(extract_positions, pos_vel, game_scene, screen_scene)
     
     # attach
-    attach_lines = lift(extract_attach, attachs, current_positions, game_scene)
+    attach_lines = lift(extract_attach, attachs, current_positions, game_scene, screen_scene)
     linesegments!(scene, attach_lines)
 
     # edges
@@ -20,16 +21,16 @@ function createGameDisplay(scene, pos_vel, attachs, edges, game_scene)
 
 end
 
-function extract_positions(pos_vel::Vector{Float64}, game_scene)
-    return [world_to_screen((pos_vel[i], pos_vel[i+1]), game_scene.bounds) for i in 1:4:length(pos_vel)]
+function extract_positions(pos_vel::Vector{Float64}, game_scene, screen_scene)
+    return [world_to_screen((pos_vel[i], pos_vel[i+1]), game_scene, screen_scene) for i in 1:4:length(pos_vel)]
 end
 
-function extract_attach(attachs::Vector{Vector{Tuple{Tuple{Float64, Float64}, Float64}}}, positions::Vector{Tuple{Float64, Float64}}, game_scene)
+function extract_attach(attachs::Vector{Vector{Tuple{Tuple{Float64, Float64}, Float64}}}, positions::Vector{Tuple{Float64, Float64}}, game_scene, screen_scene)
     out = Tuple{Float64, Float64}[]
     for (i, la) in enumerate(attachs)
         for a in la
             push!(out, positions[i])
-            push!(out, world_to_screen(a[1], game_scene.bounds))
+            push!(out, world_to_screen(a[1], game_scene, screen_scene))
         end
     end
     out
@@ -46,14 +47,22 @@ function extract_edges(edges::Vector{Vector{Tuple{Int64, Float64}}}, positions::
     out
 end
 
-function screen_to_world(pos, bounds)
-    w, h = size(scene)
-    scale = min(w / (bounds[3] - bounds[1]), h / (bounds[4] - bounds[2]))
-    return (pos ./ scale) .+ (bounds[1], bounds[2])
+"""
+    screen_to_world(pos::Tuple{Float64, Float64}, bounds::NTuple{4, Float64}, w::Float64, h::Float64)
+conversion depuis les coordonnées à l'écran vers les coordonneés dans le monde
+"""
+function screen_to_world(pos, game_scene, screen_scene)
+    w, h = size(screen_scene)
+    scale = min(w / (game_scene.bounds[3] - game_scene.bounds[1]), h / (game_scene.bounds[4] - game_scene.bounds[2]))
+    return (pos ./ scale) .+ (game_scene.bounds[1], game_scene.bounds[2])
 end
 
-function world_to_screen(pos, bounds)
-    w, h = size(scene)
-    scale = min(w / (bounds[3] - bounds[1]), h / (bounds[4] - bounds[2]))
-    return (pos .- (bounds[1], bounds[2])) .* scale
+"""
+    world_to_screen(pos::Tuple{Float64, Float64}, bounds::NTuple{4, Float64}, w::Float64, h::Float64)
+conversion depuis les coordonnées dans le monde vers les coordonnées à l'écran
+"""
+function world_to_screen(pos, game_scene, screen_scene)
+    w, h = size(screen_scene)
+    scale = min(w / (game_scene.bounds[3] - game_scene.bounds[1]), h / (game_scene.bounds[4] - game_scene.bounds[2]))
+    return (pos .- (game_scene.bounds[1], game_scene.bounds[2])) .* scale
 end
