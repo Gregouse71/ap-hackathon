@@ -1,5 +1,5 @@
-using LinearAlgebra: norm
-using OrdinaryDiffEq
+import LinearAlgebra: norm
+import OrdinaryDiffEq: solve, ODEProblem
 
 include("game.jl")
 
