@@ -20,6 +20,6 @@ struct Game_Scene
     objects::Vector{Platform}
 end
 
-s = Scene([Platform(((-1., -1.), (1., -1.)))])
+s = Game_Scene([Platform(((-1., -1.), (1., -1.)))])
 
 end
