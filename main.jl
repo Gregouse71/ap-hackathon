@@ -1,9 +1,10 @@
 import GLMakie: activate!, Scene, campixel!, events, Events, Observable, on
 include("display.jl")
 include("goo_tree.jl")
+include("game.jl")
 
 function main()
-    tree = GooTree([-1., 2., 0., 0., 1., 0., 0., 0.], [[(2, 2.)], [(1, 2.)]], [[], []])
+    tree = GooTree([-1., 2., 0., 0., 1., 0., 0., 0.], [[(2, 2.)], [(1, 2.)]], [[((-1., -1.), 1.)], [((-1., 1.), 1.)]])
     tree1 = GooTree([-1., 0., 0., 0.], [[]], [[]])
     sol = simulate_tree(tree, (0., 100.))
     game_scene = Game_Scene([Platform(((-1., -1.), (1., -1.)))], (-10.0, -5.0, 10.0, 5.0))

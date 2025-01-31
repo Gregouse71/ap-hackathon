@@ -1,7 +1,5 @@
 # Contient les types relatifs à la l'implémentation de la scène de jeux
 
-module Game
-
 """
     struct Platfrom
 
@@ -22,5 +20,3 @@ struct Game_Scene
 end
 
 s = Game_Scene([Platform(((-1., -1.), (1., -1.)))], (-10.0, -5.0, 10.0, 5.0))
-
-end
