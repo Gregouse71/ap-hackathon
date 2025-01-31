@@ -53,6 +53,5 @@ function simulate_tree(init::GooTree, tspan)
     u0 = init.positions
     p = init.edges, init.attach
     prob = ODEProblem(step!, u0, tspan, p)
-    sol = solve(prob)
-    sol.u, sol.t
+    return solve(prob)
 end

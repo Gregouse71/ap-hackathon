@@ -1,9 +1,21 @@
-function main()
-    running = true
-    while running
+import GLMakie: activate!, Scene, campixel!, events, Events, Observable, on
+include("display.jl")
 
-    end
+include("test_sim.jl")
+positions = Observable(sol(0))
+
+
+# activates a interactive window and creates a scene (= Figure())
+activate!()
+scene = Scene(camera = campixel!)
+
+# renders interactively the whole game
+createGameDisplay(scene, positions)
+
+on(events(scene).tick) do tick
+    # update function
+    positions[] = sol(min(tick.time, 3))
+    notify(positions)
 end
 
-
-main()
+scene
