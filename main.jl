@@ -26,5 +26,13 @@ function main()
         notify(positions)
     end
 
+    #=on(events(scene).mousebutton) do event
+        if event.button == Mouse.left && event.action == Mouse.press
+            mp = events(scene).mouseposition[]
+    
+            add_goo!(tree, platforms, mp)
+        end
+    end=#
+
     scene
 end
