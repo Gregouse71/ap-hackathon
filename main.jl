@@ -3,7 +3,7 @@ include("display.jl")
 include("goo_tree.jl")
 
 function main()
-    tree = GooTree([-1., 2., 0., 0., 1., 0., 0., 0.], [[(2, 2.)], [(1, 2.)]], [[((-1., -1.), 1.)], [((1., -1.), 1.)]])
+    tree = GooTree([-1., 2., 0., 0., 1., 0., 0., 0.], [[(2, 2.)], [(1, 2.)]], [[], []])
     tree1 = GooTree([-1., 0., 0., 0.], [[]], [[]])
     sol = simulate_tree(tree, (0., 100.))
     
@@ -25,14 +25,6 @@ function main()
         positions[] = sol(tick.time % 100)
         notify(positions)
     end
-
-    #=on(events(scene).mousebutton) do event
-        if event.button == Mouse.left && event.action == Mouse.press
-            mp = events(scene).mouseposition[]
-    
-            add_goo!(tree, platforms, mp)
-        end
-    end=#
 
     scene
 end
