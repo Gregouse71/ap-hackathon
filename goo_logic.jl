@@ -1,8 +1,6 @@
-module GooLogic
 using LinearAlgebra: norm, dot
 
 include("goo_tree.jl")
-include("game.jl")
 
 max_link_goo = 1.0
 max_link_attach = 0.5
@@ -78,7 +76,7 @@ function add_goo!(tree::GooTree, platforms::Game_Scene, pos)
         append!(tree.positions, pos, 0, 0)
         push!(tree.edges, [])
         for (i, dist) in enumerate(goo_dist)
-            if dist <= max_link_gooi
+            if dist <= max_link_goo
                 push!(tree.edges[i], (n, goo_dist[i]))
                 push!(tree.edges[n], (i, goo_dist[i]))
             end
@@ -150,4 +148,3 @@ test = GooTree([], [], [])
 add_goo!(test, plat, (0.55, -1.0))
 add_goo!(test, plat, (0.50, -1.0))
 =#
-end

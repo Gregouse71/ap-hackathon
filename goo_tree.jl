@@ -1,4 +1,3 @@
-module GooTree
 import LinearAlgebra: norm
 import OrdinaryDiffEq: solve, ODEProblem
 
@@ -58,5 +57,4 @@ function simulate_tree(init::GooTree, tspan)
     p = init.edges, init.attach
     prob = ODEProblem(step!, u0, tspan, p)
     return solve(prob)
-end
 end

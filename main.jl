@@ -1,7 +1,5 @@
 import GLMakie: activate!, Scene, campixel!, events, Events, Observable, on, Mouse
 include("display.jl")
-include("goo_tree.jl")
-include("game.jl")
 include("goo_logic.jl")
 
 function main()
@@ -15,7 +13,7 @@ function main()
     tree1 = GooTree([-1., 0., 0., 0.], [[]], [[]])
 
     sol = simulate_tree(tree, (0., sim_continue))#sol = Observable(simulate_tree(tree, (0., sim_continue)))
-    game_scene = Game_Scene([Platform(((-1., 0.), (1., 0.)))], (-10.0, -5.0, 10.0, 5.0))
+    game_scene = Game_Scene([], [Platform(((-1., 0.), (1., 0.)))], (-10.0, -5.0, 10.0, 5.0))
     
     positions = Observable(tree.positions)
     attachs = Observable(tree.attach)
