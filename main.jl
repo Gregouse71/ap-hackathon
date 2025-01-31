@@ -3,7 +3,7 @@ include("display.jl")
 include("goo_tree.jl")
 
 function main()
-    tree = GooTree([-1., 2., 0., 0., 1., 0., 0., 0.], [[(2, 2.)], [(1, 2.)]], [[], []])
+    tree = GooTree([-1., 2., 0., 0., 1., 0., 0., 0.], [[(2, 2.)], [(1, 2.)]], [[((-1., -1.), 1.)], [((1., -1.), 1.)]])
     tree1 = GooTree([-1., 0., 0., 0.], [[]], [[]])
     sol = simulate_tree(tree, (0., 100.))
     

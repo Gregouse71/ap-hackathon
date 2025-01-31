@@ -31,7 +31,8 @@ function step!(positions_derivee, positions::Vector{Float64}, params , t)
 
         ΣF = [0., -80.]  # Accumulateur des forces
         for voisin in edges[i]  # Pour chaque voisin du point
-            pos, l0 = voisin
+            ind, l0 = voisin
+            pos = positions[4ind - 3:4ind - 2]
             δpos = pos .- positions[4i - 3:4i - 2]  # Difference de position des points
             ΣF .+= k * (1 - l0/norm(δpos)) * δpos  # Force du ressort: loi de Hooke
         end
@@ -40,6 +41,7 @@ function step!(positions_derivee, positions::Vector{Float64}, params , t)
             δpos = att .- positions[4i - 3:4i - 2]  # Difference de position des points
             ΣF .+= k * (1 - l0/norm(δpos)) * δpos  # Force du ressort: loi de Hooke
         end
+        ΣF .+= -2e-1 * positions[4i - 1:4i]  # Frottements fluides
         positions_derivee[4i - 1:4i] = ΣF / m  # l'accélération est la dérivée de la vitesse
     end
 end
