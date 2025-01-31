@@ -3,6 +3,9 @@ using LinearAlgebra: norm, dot
 include("goo_tree.jl")
 include("game.jl")
 
+max_link_goo = 3.0
+max_link_attach = 2.0
+
 """
     function goo_distances(tree::GooTree, pos)
 
@@ -67,14 +70,14 @@ function add_goo!(tree::GooTree, platforms::Game_Scene, pos)
     plat_added = false
 
     goo_dist = goo_distances(tree, pos)
-    if minimum(goo_dist, init = Inf64) > 100
+    if minimum(goo_dist, init = Inf64) > max_link_goo
         goo_added = false
     else
         n = length(goo_dist) + 1
         append!(tree.positions, pos, 0, 0)
         push!(tree.edges, [])
         for (i, dist) in enumerate(goo_dist)
-            if dist <= 100
+            if dist <= max_link_goo
                 push!(tree.edges[i], (n, goo_dist[i]))
                 push!(tree.edges[n], (i, goo_dist[i]))
             end
@@ -83,7 +86,7 @@ function add_goo!(tree::GooTree, platforms::Game_Scene, pos)
     end
 
     plat_dist, plat_pos = platform_distances(platforms, pos)
-    if minimum(plat_dist, init = Inf64) > 100
+    if minimum(plat_dist, init = Inf64) > max_link_attach
         plat_added = false
     else
         if !goo_added
@@ -93,11 +96,14 @@ function add_goo!(tree::GooTree, platforms::Game_Scene, pos)
         n = length(goo_dist) + 1
         push!(tree.attach, [])
         for (i, dist) in enumerate(plat_dist)
-            if dist <= 100
+            if dist <= max_link_attach
                 push!(tree.attach[n], (plat_pos[i], plat_dist[i]))
             end
         end
         plat_added = true
+    end
+    if !plat_added && goo_added
+        push!(tree.attach, [])
     end
     plat_added || goo_added
 end
