@@ -2,13 +2,13 @@ using LinearAlgebra: norm
 using DifferentialEquations: ODEProblem, solve, TSit5
 
 """
-    GooTree{N}
+    GooTree
 Représente un arbre de goo:
 - *positions[4i:4i + 3]* est la position et la vitesse du i ème goo
 - *aretes* est la matrice d'adjacence du graphe formé par les goos: aretes[i] est la liste des voisins du i eme goo avec la longueur à vide associée
 
 """
-struct GooTree{N}
+struct GooTree
     positions::Vector{Float64}
     edges::Vector{Vector{Tuple{Int, Float64}}}
 end
