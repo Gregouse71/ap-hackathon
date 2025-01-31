@@ -67,14 +67,14 @@ function add_goo!(tree::GooTree, platforms::Game_Scene, pos)
     plat_added = false
 
     goo_dist = goo_distances(tree, pos)
-    if minimum(goo_dist, init = Inf64) > 0.2
+    if minimum(goo_dist, init = Inf64) > 100
         goo_added = false
     else
         n = length(goo_dist) + 1
         append!(tree.positions, pos, 0, 0)
         push!(tree.edges, [])
         for (i, dist) in enumerate(goo_dist)
-            if dist <= 0.2
+            if dist <= 100
                 push!(tree.edges[i], (n, goo_dist[i]))
                 push!(tree.edges[n], (i, goo_dist[i]))
             end
@@ -83,7 +83,7 @@ function add_goo!(tree::GooTree, platforms::Game_Scene, pos)
     end
 
     plat_dist, plat_pos = platform_distances(platforms, pos)
-    if minimum(plat_dist, init = Inf64) > 0.1
+    if minimum(plat_dist, init = Inf64) > 100
         plat_added = false
     else
         if !goo_added
@@ -93,7 +93,7 @@ function add_goo!(tree::GooTree, platforms::Game_Scene, pos)
         n = length(goo_dist) + 1
         push!(tree.attach, [])
         for (i, dist) in enumerate(plat_dist)
-            if dist <= 0.1
+            if dist <= 100
                 push!(tree.attach[n], (plat_pos[i], plat_dist[i]))
             end
         end
