@@ -1,7 +1,8 @@
-import GLMakie: activate!, Scene, campixel!, events, Events, Observable, on
+import GLMakie: activate!, Scene, campixel!, events, Events, Observable, on, Mouse
 include("display.jl")
 include("goo_tree.jl")
 include("game.jl")
+include("goo_logic.jl")
 
 function main()
     tree = GooTree([-1., 2., 0., 0., 1., 0., 0., 0.], [[(2, 2.)], [(1, 2.)]], [[((-1., -1.), 1.)], [((-1., 1.), 1.)]])
@@ -28,5 +29,22 @@ function main()
         notify(positions)
     end
 
+<<<<<<< HEAD
+=======
+    on(events(scene).mousebutton) do event
+        if event.button == Mouse.left && event.action == Mouse.press
+            mp = events(scene).mouseposition[]
+            
+            add_goo!(tree, game_scene, screen_to_world(mp, game_scene, scene))
+            positions[] = tree.positions
+            attachs[] = tree.attach
+            edges[] = tree.edges
+            notify(positions)
+            notify(attachs)
+            notify(edges)
+        end
+    end
+
+>>>>>>> f2be7639dd4857a7d7495e43fcc461c2fd62fd99
     scene
 end

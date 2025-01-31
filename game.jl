@@ -18,5 +18,3 @@ struct Game_Scene
     objects::Vector{Platform}
     bounds::NTuple{4, Float64}
 end
-
-s = Game_Scene([Platform(((-1., -1.), (1., -1.)))], (-10.0, -5.0, 10.0, 5.0))
