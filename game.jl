@@ -1,4 +1,5 @@
 # Contient les types relatifs à la l'implémentation de la scène de jeux
+
 """
     struct Platfrom
 
